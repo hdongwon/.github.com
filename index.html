@@ -1,7 +1,1760 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE HTML>
 <html>
 <head>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+	var contextPath = '';
+	var imagePath = '//stor.auton.kr/auton/o2o';
+	var acsid = '';
+	var vipYn = "";
+	var rUri = '';
+	
+	var page=1;
+	var recodeCount = 20;
+	
+	var hashCnt = 0;
+	
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<meta http-equiv="pragma" content="no-cache">
+
+<link rel="shortcut icon" type="image/x-icon" href="/resources/img/Qmembers.ico" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- 구글서치콘솔  -->
+<meta name="google-site-verification" content="xyU8PqOhEpcbglNuFscBIv9DQorpnqm-3hAkO69zgD0" />
+<!-- 네이버서치어드바이저  -->
+<meta name="naver-site-verification" content="8ae9cf9f6cb64946d7be9a4a85500fedfecdf90e" /> 
+
+<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=089fd8401e2f0e3b334a8f50bd8d877a&libraries=services,clusterer"></script> -->
+<script type="text/javascript" src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+	
+
+<script type="text/javascript" src="/resources/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/resources/js/jquery.touchFlow.js"></script>
+<script type="text/javascript" src="/resources/js/jquery.bxslider.min.js"></script>
+<script type="text/javascript" src="/resources/js/lightslider.js"/></script>
+<script type="text/javascript" src="/resources/js/jquery-ui.min.js"></script>
+
+<script type="text/javascript" src="/resources/js/util.js"></script>
+<script type="text/javascript" src="/resources/js/common.js?20181127"></script>
+<script type="text/javascript" src="/resources/js/moment/moment.min.js"></script>
+<script type="text/javascript" src="/resources/js/jquery.selectric.js?20181101"></script>
+<script type="text/javascript" src="/resources/js/lazyload.js?20181101"></script>
+
+<link rel="stylesheet" href="/resources/css/lightslider.css" />
+<link rel="stylesheet" href="/resources/css/base.css?20181103" />
+<link rel="stylesheet" href="/resources/css/sub.css?20181204" />
+<link rel="stylesheet" href="/resources/css/style.css?20191114" />
+
+
+
+
+
+
+
+	<link rel="stylesheet" href="/resources/css/m_common.css?20200911" />
+	<script>var mobileType = "M";</script>
+	
+
+
+
+
+
+
+<!-- services와 clusterer, drawing 라이브러리 불러오기 -->
+<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=089fd8401e2f0e3b334a8f50bd8d877a&libraries=services,clusterer"></script> -->
+<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=54f98c240d227241f894e6c51e490dbb&libraries=services,clusterer"></script> -->
+<script type="text/javascript">
+
+var accountYn = 'N';
+
+var loginFn = function(){
+	
+}
+
+$(function(){
+	if(location.href.indexOf("/talkn") <= 0 ){
+		$.ajax({
+			url: contextPath + "/accountYn", 
+			method: "GET",
+			success : function(data) {
+				accountYn = data;
+			}
+		});
+	}
+	
+});
+
+var t3Path = 'https://nflab.auton.kr/api/t3';
+/* var t3Path = 'http://nflab.auton.kr'; */
+
+function fn_confirmAuthenticationPopup() {
+	var formModal = $('#authenticationModal');
+	if (false) {
+		localTest();
+	} else {
+		openPCCWindow();
+	}
+}
+
+// 휴대폰 본인인증 창 호출
+function openPCCWindow(){
+	PCC_window = window.open(t3Path + '/mypage/prod/login/checkplusmain/join?returnUrl=service_order&siteCode=kia_carnlife', 
+			'PCCV3Window', 'width=430, height=560, resizable=1, scrollbars=no, status=0, titlebar=0, toolbar=0, left=300, top=200' );
+	PCC_window.focus();	
+}
+
+// 테스트 로그인
+function localTest() {
+	$('#id2').val('kZuxcNEGQ6ND98BHaJGTFNlIFR+LSVhwUDY5TMGsY6ZjW3Tv8qjkbS6J6NKG/3GguSw44n7MInBxNmJy2XSBkQ==');
+	$('#password2').val('kZuxcNEGQ6ND98BHaJGTFNlIFR+LSVhwUDY5TMGsY6ZjW3Tv8qjkbS6J6NKG/3GguSw44n7MInBxNmJy2XSBkQ==');
+	
+	$.ajax({
+	    type:"POST", 
+    	url: contextPath + "/j_spring_security_check",
+    	dataType : 'json',
+    	data: $("#loginForm").serialize(),
+    	success:function(data){
+    	},
+		error:function(data){
+			console.log(data);
+			if(data.status == 200){
+	    		console.log("loginSuccess");
+	    		loginFn();
+			}
+		}
+	});
+	
+}
+// 테스트 로그인
+function localTest2() {
+	$('#id2').val('3fgUVC5tq3zq+SOARq/3jn7UKBxN7lBLynabTAeKRUkx1JclRcJJh9rhjY9BbAbMaR8Y45s3t//+zIT2eYjKwQ==');
+	$('#password2').val('3fgUVC5tq3zq+SOARq/3jn7UKBxN7lBLynabTAeKRUkx1JclRcJJh9rhjY9BbAbMaR8Y45s3t//+zIT2eYjKwQ==');
+	
+	$.ajax({
+	    type:"POST", 
+    	url: contextPath + "/j_spring_security_check",
+    	dataType : 'json',
+    	data: $("#loginForm").serialize(),
+    	success:function(data){
+    	},
+		error:function(data){
+			console.log(data);
+			if(data.status == 200){
+	    		console.log("loginSuccess");
+	    		loginFn(); 
+			}
+		}
+	});
+	
+}
+
+//테스트 로그인 - 이혜원
+function localTest3() {
+	$('#id2').val('PL/9UtGd84OVZZZneUQSHc1PIZGgRUX8n8yl51dB5ziEYyki2oudpU7jtrBC58TChujz9FF8RDFzv8s3XxypoQ==');
+	$('#password2').val('PL/9UtGd84OVZZZneUQSHc1PIZGgRUX8n8yl51dB5ziEYyki2oudpU7jtrBC58TChujz9FF8RDFzv8s3XxypoQ==');
+// 	$('#id2').val('lKloO5ZU2ELY/F4JaamU6mu21zd58b4v13cgizV+/pxAa1PCGWdl4FP8v/omJZ3H6YejDF47K0Qu87mYc+XU5g=='); 
+// 	$('#password2').val('lKloO5ZU2ELY/F4JaamU6mu21zd58b4v13cgizV+/pxAa1PCGWdl4FP8v/omJZ3H6YejDF47K0Qu87mYc+XU5g==');
+	
+	$.ajax({
+	    type:"POST", 
+    	url: contextPath + "/j_spring_security_check",
+    	dataType : 'json',
+    	data: $("#loginForm").serialize(),
+    	success:function(data){
+    	},
+		error:function(data){
+			console.log(data);
+			if(data.status == 200){
+	    		console.log("loginSuccess");
+	    		loginFn(); 
+			}
+		}
+	});
+	
+}
+
+//테스트 로그인 - 박민호
+function localTest4() {
+	$('#id2').val('DTXHU41kAgYdJMy7k5J2akhovv5YUOkUmss4HYPOERrjQMn9KHduF82U0KxQWSR6tQLnLgsntnabXQr+FlDqcg==');
+	$('#password2').val('DTXHU41kAgYdJMy7k5J2akhovv5YUOkUmss4HYPOERrjQMn9KHduF82U0KxQWSR6tQLnLgsntnabXQr+FlDqcg==');
+	
+	$.ajax({
+	    type:"POST", 
+    	url: contextPath + "/j_spring_security_check",
+    	dataType : 'json',
+    	data: $("#loginForm").serialize(),
+    	success:function(data){
+    	},
+		error:function(data){
+			console.log(data);
+			if(data.status == 200){
+	    		console.log("loginSuccess");
+	    		loginFn(); 
+			}
+		}
+	});
+	
+}
+
+//2019-12-09 유입자 통계 관련 추가.
+function loadVisitor() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {}
+	};
+ 	xhttp.open("GET", "https://stor.auton.kr/kia_mobile.html", true);
+// 	xhttp.open("GET", "https://stor.auton.kr/kia_app.html", true);
+	xhttp.send();
+}
+loadVisitor();
+
+//기아 앱 용품메인 모음전 배너 클릭 카운트
+function clickEvent(pcid) {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {}
+		};
+		xhttp.open("GET", "https://stor.auton.kr/kia_"+pcid+".html", true);
+		/* xhttp.open("GET", "https://stor.auton.kr/kia_app.html", true); */
+		xhttp.send();
+	}
+
+
+</script>
+
+	
+	<link rel="stylesheet" href="/resources/css/red_main.css?20191104" />
+	
+	
+	<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=089fd8401e2f0e3b334a8f50bd8d877a&libraries=services,clusterer"></script> -->
+	<title>카앤라이프 몰</title>
+	
+	<!-- 2019-01-04 실장님 요청으로 스크립트 추가 -->	
+	<script type="text/javascript">
+		(function(w, d, a){
+			w.__beusablerumclient__ = {
+				load : function(src){
+					var b = d.createElement("script");
+					b.src = src; b.async=true; b.type = "text/javascript";
+					d.getElementsByTagName("head")[0].appendChild(b);
+				}
+			};w.__beusablerumclient__.load(a);
+		})(window, document, '//rum.beusable.net/script/b190103e235128u327/433ff16250');
+	</script>
+			
+	<script>
+	
+		var errorMessage = 'null';
+		if (errorMessage != "" && errorMessage != "null") {
+			errorMessage = null;
+			location.href = contextPath + "/index/main";
+			alert(errorMessage); 
+		}
+		
+		var firstGoYn = 0;
+	
+		$(function() {
+			
+			popupList();
+			
+			openCarCareTab(1168);
+			openTitleGroupProduct(163);
+			
+			$("#search").keyup(function(e){
+				if(e.keyCode == 13){
+					searchProduct();
+				}
+			});
+			
+			$("#search").focusin(function() {
+				$("#search").select();
+			});
+		});
+	
+		function goUrl(url){
+			sessionStorage.pageScroll = $(document).scrollTop();
+			
+			location.href = url;
+			
+		}
+		
+		function fnDetail(pid) {
+			sessionStorage.pageCnt = 0;
+			sessionStorage.page = $('#page').val();
+			sessionStorage.pageScroll = $(document).scrollTop();
+			
+			location.href = contextPath + "/product/category/product_view/" + pid;
+		}
+		
+		
+		function searchProduct() {
+			var searchKeyword = $("#search").val();
+			
+			if (!searchKeyword) {
+				return;
+			}
+			
+			location.href=contextPath + "/search/list?keyword=" + searchKeyword + "&sitecode=kia_carnlife&vipYn=" + (vipYn == "vip" ? "Y" : "N");
+		}
+		
+		
+		function openCarCareTab(pcid){
+			sessionStorage.mainCarePcid = pcid;
+			
+			var productBody = $(".tabs_content_box ul");
+			var recodeCount = 2;
+			var productHtml = '';
+			
+			$.ajax({
+				url: contextPath +  "/product/category/ajax/category_product_list", 
+				method: "GET",
+				data: {"search.pcid" : pcid, "search.reqStatus" : "1", "page" : 1, "recodeCount" : recodeCount},
+				success : function(data) {
+					var productList = data.productList;
+					var paginationInfo = data.paginationInfo;
+					
+					for(var i in productList){
+						var thumbImg = contextPath + '/resources/img/common/noimagefound.jpg';
+						if(productList[i].imagePath1 != null){
+							thumbImg = imagePath + productList[i].imagePath1;
+						}
+						
+						var html =  '<li><a href="javascript:fnDetail(\''+ productList[i].pid +'\');"><div class="product_img">';
+							html += '<img src="' + thumbImg + '" alt="이미지1" >';
+							
+							/* 20181218 (문서번호:1812-0693 개선사항) */
+							/*html += '<div class="validity_date"><span class="first">유효기간</span>';
+							html += '<span class="last">2018-11-30 ~ 2019-03-31</span>';
+							html += '<div class="validity_bg"></div>';
+							html += '</div>';*/
+							/*//20181218 (문서번호:1812-0693 개선사항) */
+							
+							html += '</div>';
+							
+							/* 20181213 HIT/SALE 아이콘 추가 */
+							html += '<div class="ico_box">';
+							if((productList[i].sellRank > 0) && (productList[i].sellRank <= 100)) {
+								html += '<span class="hit"><img src="/resources/img/ico/ico_hit.png" alt="hit 아이콘"></span>';
+							}
+							
+							if(productList[i].price < productList[i].originprice) {
+								html += '<span class="sale"><img src="/resources/img/ico/ico_sale.png" alt="ico_sale 아이콘"></span>';
+							}
+							html += '</div>';
+							
+							html += '<div class="product_name">' + productList[i].name + '</div>';
+							html += '<div class="product_sub_name">' + null2str(productList[i].prdIntro) + '</div><div class="product_price">';
+	
+							html += '<div class="product_price_title">' + ( productList[i].originprice > productList[i].price ? discountRate(productList[i].originprice, productList[i].price) : '' ) + '</div>';
+						 
+							html += '<div class="product_price_all">';
+						if(productList[i].originprice > productList[i].price){
+							html += '<span class="origin_price">' + comma(productList[i].originprice) + ' 원</span>';
+						} 
+						 
+							html += '<span class="sale_price">' + comma(productList[i].price) + ' 원</span>';
+							html += '</div></div></a></li>';
+					
+						productHtml += html;
+					}
+	
+					if(paginationInfo.totalRecordCount == 0){
+						productHtml = '<div class="no_item_product_list">';
+						productHtml += '<div class="icon_img">';
+						productHtml += '<img src="/resources/img/ico/ico_exclamation_point.png" alt="아이콘">';
+						productHtml += '</div>';
+						productHtml += '<h3>' + '등록된 상품이 없습니다.' + '</h3>';
+						productHtml += '</div>'
+						
+					}
+	
+					productBody.html(productHtml);
+					
+					$('.tabs_ul li').removeClass('active');
+					$('#care'+pcid).addClass('active');
+				}
+			});
+		}
+		
+		function openTitleProduct(pcid){
+			sessionStorage.mainTitlePcid = pcid;
+			sessionStorage.mainTitlePgid = '';
+			
+			var productBody = $(".title_tab_wrap .produxt_list ul");
+			var recodeCount = 10;
+			var productHtml = '';
+			
+			var data;
+			
+			if(pcid == 1095 || pcid == 1096){
+				data = {"search.pcid" : pcid, "search.reqStatus" : "1", "page" : 1, "recodeCount" : recodeCount, "search.mmUse" : 'Y'}			
+			}else{
+				data = {"search.pcid" : pcid, "search.reqStatus" : "1", "page" : 1, "recodeCount" : recodeCount, "search.orderBy" : "starPoint", "search.order" : "desc", "search.mmUse" : 'Y'}
+			}
+			
+			$.ajax({
+				url: contextPath +  "/product/category/ajax/category_product_list", 
+				method: "GET",
+				data: data,
+				success : function(data) {
+					var productList = data.productList;
+					var paginationInfo = data.paginationInfo;
+					
+					for(var i in productList){
+						var thumbImg = contextPath + '/resources/img/common/noimagefound.jpg';
+						if(productList[i].imagePath1 != null){
+							thumbImg = imagePath + productList[i].imagePath1;
+						}
+						
+						var html =  '<li><a href="javascript:fnDetail(\''+ productList[i].pid +'\');"><div class="product_img">';
+							html += '<img src="' + thumbImg + '" alt="이미지1" >';
+							
+							/* 20181218 (문서번호:1812-0693 개선사항) */
+							/*html += '<div class="validity_date"><span class="first">유효기간</span>';
+							html += '<span class="last">2018-11-30 ~ 2019-03-31</span>';
+							html += '<div class="validity_bg"></div>';
+							html += '</div>';*/
+							/*//20181218 (문서번호:1812-0693 개선사항) */
+							
+							html += '</div>';
+							
+							/* 20181213 HIT/SALE 아이콘 추가 */
+							html += '<div class="ico_box">';
+							if((productList[i].sellRank > 0) && (productList[i].sellRank <= 100)) {
+								html += '<span class="hit"><img src="/resources/img/ico/ico_hit.png" alt="hit 아이콘"></span>';
+							}
+							
+							if(productList[i].price < productList[i].originprice) {
+								html += '<span class="sale"><img src="/resources/img/ico/ico_sale.png" alt="ico_sale 아이콘"></span>';	
+							}
+							
+							html += '</div>';
+							
+							html += '<div class="product_name">' + productList[i].name + '</div>';
+							html += '<div class="product_sub_name">' + null2str(productList[i].prdIntro) + '</div><div class="product_price">';
+	
+							html += '<div class="product_price_title">' + ( productList[i].originprice > productList[i].price ? discountRate(productList[i].originprice, productList[i].price) : '' ) + '</div>';
+							
+							html += '<div class="product_price_all">';
+						if(productList[i].originprice > productList[i].price){
+							html += '<span class="origin_price">' + comma(productList[i].originprice) + ' 원</span>';
+						} 
+						 
+							html += '<span class="sale_price">' + comma(productList[i].price) + ' 원</span>';
+							html += '</div></div></a></li>';
+					
+						productHtml += html;
+					}
+	
+					if(paginationInfo.totalRecordCount == 0){
+						productHtml = '<div class="no_item_product_list">';
+						productHtml += '<div class="icon_img">';
+						productHtml += '<img src="/resources/img/ico/ico_exclamation_point.png" alt="아이콘">';
+						productHtml += '</div>';
+						productHtml += '<h3>' + '등록된 상품이 없습니다.' + '</h3>';
+						productHtml += '</div>'
+						
+					}
+	
+					productBody.html(productHtml);
+					
+					if(pcid == 1326){
+						$('.title_tab_all a').prop('href', contextPath + '/index/eventMall#1326^1326');
+					}else if(pcid == 1095){
+						$('.title_tab_all a').prop('href', contextPath + '/index/productMall?view=recommendProduct');
+					}else if(pcid == 1096){
+						$('.title_tab_all a').prop('href', contextPath + '/index/carCare?view=recommendService');
+					}
+					
+					$('.title_tab_wrap>ul li').removeClass('on');
+					$('#title'+pcid).addClass('on');
+				}
+			});
+		}
+		
+		function openTitleGroupProduct(pgid){
+			sessionStorage.mainTitlePcid = '';
+			sessionStorage.mainTitlePgid = pgid;
+			
+			var productBody = $(".title_tab_wrap .produxt_list ul");
+			var recodeCount = 10;
+			var productHtml = '';
+			
+			$.ajax({
+				url: contextPath +  "/product/category/category_productGroup", 
+				method: "GET",
+				data: {"search.pgid" : pgid, "search.reqStatus" : "1", "page" : 1, "recodeCount" : recodeCount, "search.orderBy" : "starPoint", "search.order" : "desc", "search.mmUse":"Y"},
+				success : function(data) {
+					var productList = data.productList;
+					var paginationInfo = data.paginationInfo;
+					
+					for(var i in productList){
+						var thumbImg = contextPath + '/resources/img/common/noimagefound.jpg';
+						if(productList[i].imagePath1 != null){
+							thumbImg = imagePath + productList[i].imagePath1;
+						}
+						
+						var html =  '<li><a href="javascript:fnDetail(\''+ productList[i].pid +'\');"><div class="product_img">';
+							html += '<img src="' + thumbImg + '" alt="이미지1" >';
+							
+							/* 20181218 (문서번호:1812-0693 개선사항) */
+							/*html += '<div class="validity_date"><span class="first">유효기간</span>';
+							html += '<span class="last">2018-11-30 ~ 2019-03-31</span>';
+							html += '<div class="validity_bg"></div>';
+							html += '</div>';*/
+							/*//20181218 (문서번호:1812-0693 개선사항) */
+							
+							html += '</div>';
+							
+							
+							
+							/* 20181213 HIT/SALE 아이콘 추가 */
+							html += '<div class="ico_box">';
+							if((productList[i].sellRank > 0) && (productList[i].sellRank <= 100)) {
+								html += '<span class="hit"><img src="/resources/img/ico/ico_hit.png" alt="hit 아이콘"></span>';
+							}
+							
+							if(productList[i].price < productList[i].originprice) {
+								html += '<span class="sale"><img src="/resources/img/ico/ico_sale.png" alt="ico_sale 아이콘"></span>';
+							}
+							html += '</div>';
+							
+							html += '<div class="product_name">' + productList[i].name + '</div>';
+							html += '<div class="product_sub_name">' + null2str(productList[i].prdIntro) + '</div><div class="product_price">';
+	
+							html += '<div class="product_price_title">' + ( productList[i].originprice > productList[i].price ? discountRate(productList[i].originprice, productList[i].price) : '' ) + '</div>';
+						 
+							html += '<div class="product_price_all">';
+						if(productList[i].originprice > productList[i].price){
+							html += '<span class="origin_price">' + comma(productList[i].originprice) + ' 원</span>';
+						} 
+						 
+							html += '<span class="sale_price">' + comma(productList[i].price) + ' 원</span>';
+							html += '</div></div></a></li>';
+					
+						productHtml += html;
+					}
+	
+					productBody.html(productHtml);
+	
+					if(pgid == 165){
+						$('.title_tab_all a').prop('href', contextPath + '/index/productGroup#165^특가상품');
+					}else if(pgid == 163){
+						$('.title_tab_all a').prop('href', contextPath + '/index/productGroup#163^신상품');
+					}
+				
+					
+					$('.title_tab_wrap>ul li').removeClass('on');
+					$('#title'+pgid).addClass('on');
+				},
+				complete: function () {
+					if(firstGoYn == 0){
+						$(document).scrollTop(sessionStorage.pageScroll);
+						firstGoYn++;
+					}
+			    }
+			});
+		}
+		
+		function popupList() {
+			$.ajax({
+				url : contextPath + "/content/popup/content",
+				success: function(data) {
+					
+					var popupContent = "";
+					
+					if(data.resultList != "") {
+						
+						getCookie("main_today");
+						
+						if(getCookie("main_today") != "done") {
+							$("#main_popup").css('display', 'block');
+						}
+						
+						popupContent = data.resultList[0].content;
+						
+						console.log("popupContent : + " + popupContent);
+						
+						$(".popup_img").html(popupContent);
+						
+					} else {
+						$("#main_popup").css('display', 'none');
+					}
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					console.log("jqXHR : " + jqXHR );
+					console.log("textStatus : " + textStatus );
+					console.log("errorThrown : " + errorThrown );
+				}
+			});
+		}
+	
+	</script>
 </head>
 <body>
-  <h1>hdongwon // 현동원 // 12345
+	<header>
+		
+
+
+
+
+
+
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics 20181030 애널리틱스 추적설정 추가소스 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128375050-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-128375050-1');
+</script>
+
+<!-- 네이버 애널리틱스 스크립트 -->
+<script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
+<script type="text/javascript">
+	if(!wcs_add) var wcs_add = {};
+	wcs_add["wa"] = "531f65befe87f0";
+	wcs_do();
+</script>
+
+<script type="text/javascript">
+(function(w, d, a){
+	w.__beusablerumclient__ = {
+		load : function(src){
+			var b = d.createElement("script");
+			b.src = src; b.async=true; b.type = "text/javascript";
+			d.getElementsByTagName("head")[0].appendChild(b);
+		}
+	};w.__beusablerumclient__.load(a);
+})(window, document, '//rum.beusable.net/script/b190103e235128u327/433ff16250');
+</script>
+
+
+<script>
+
+
+
+function calcHeight(){
+	 var the_height = document.getElementById('iframeWrap').contentWindow.document.body.scrollHeight;
+	 document.getElementById('iframeWrap').height = the_height;
+	 document.getElementById('iframeWrap').style.overflow = "hidden";
+}
+
+$(window).on('load', function() {
+    console.log('로딩 비활성화');
+    $('.lodingImg').hide();
+    
+});
+
+/* 20181002 탑배너 버튼 클릭 수정 */
+$(function(){
+	
+	var siteAddr = location.href;
+
+	if(!false && siteAddr.includes("carnlife.auton.kr")) {
+		location.href="https://mkia.auton.kr/";
+    }
+	
+	$('.top_popup_close').click(function(){
+		$('#notice_popup').show();
+	});
+	
+	$('#hideInputUrl input').val(shareUrl);
+	
+});
+function notice_popup_cencel(){
+	$('#notice_popup').hide();
+	$('#topBanner').show();
+}
+
+function main_popup_close(){
+	
+	var expiredays = $('input[name="main_popup_check"]:checked').val();
+	
+	if(expiredays == "1") {
+		setCookieAt00("main_today", "done", expiredays);
+	}
+	
+	$("#main_popup").css('display', 'none');
+}
+
+//쿠키 가져오기  
+function getCookie( name ) {  
+   var nameOfCookie = name + "=";  
+   var x = 0;  
+   while ( x <= document.cookie.length )  
+   {  
+       var y = (x+nameOfCookie.length);  
+       if ( document.cookie.substring( x, y ) == nameOfCookie ) {
+           if ( (endOfCookie=document.cookie.indexOf( ";", y )) == -1 )  
+               endOfCookie = document.cookie.length;  
+           return unescape( document.cookie.substring( y, endOfCookie ) );  
+       }  
+       x = document.cookie.indexOf( " ", x ) + 1;  
+       if ( x == 0 )  
+           break;  
+   }  
+   return "";  
+}  
+
+
+// 00:00 시 기준 쿠키 설정하기  
+// expiredays 의 새벽  00:00:00 까지 쿠키 설정  
+
+function setCookieAt00(name, value, expiredays) {
+	var todayDate = new Date(); 
+	todayDate.setDate( todayDate.getDate() + expiredays ); 
+	document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"
+}
+
+function goLogout(){
+	location.href = contextPath + "/j_spring_security_logout";
+}
+</script>
+<!-- 로그인 요청 중 대신 보여줄 화면 -->
+<div class="lodingImg">
+	<div class="loding_wrap">
+		<img src="/resources/img/ico/Loading_2.gif" alt="로딩바"/>
+	</div>
+</div>
+
+<!-- 회원가입 form -->
+<form action="/login/memberAgree" id="joinForm" name="joinForm"  method="post" role="from">
+	<input type="hidden" id="checkReturn" value="" />
+	<input type="hidden" id="di" name="di"/>
+	<input type="hidden" id="ci1" name="ci1"/>
+	<input type="hidden" id="id" name="id"/>
+	<input type="hidden" id="password" name="password"/>
+	<input type="hidden" id="name" name="name"/>
+	<input type="hidden" id="sexType" name="sexType"/>
+	<input type="hidden" id="birthday" name="birthday"/>
+	<input type="hidden" id="celphone" name="celphone"/>
+	<input type="hidden" id="cellCorp" name="cellCorp"/>
+	<input type="hidden" id="redirectUri" name="redirectUri"/>
+	<input type="hidden" id="acsid" name="acsid"/>
+</form>
+
+<!-- 로그인 form -->
+<form  action="/j_spring_security_check"  id="loginForm" name="loginForm" method="post" role="from">
+	<input type="hidden" value="" id="id2" name="j_username" />
+	<input type="hidden" value="" id="password2"  name="j_password" />
+	<input type="hidden" value="" id="prevPage"  name="prevPage" />
+</form>
+
+<!-- 공유하기 팝업 -->
+<div id="popSharingBlind">
+	<div id="popSharing">
+		<a href="javascript:closeShare();" class="popup_close"><img src="/resources/img/ico/ico_pop_close.png" alt="" /></a>
+		<h3>공유하기</h3>
+		<div class="icon_table">
+			<table class="">
+				<colgroup>
+					<col width="25%"/>
+					<col width="25%"/>
+					<col width="25%"/>
+					<col width="25%"/>
+				</colgroup>
+				<tr>
+					
+					<td>
+						<a href="javascript:shareKakao();"><img src="/resources/img/ico/ico_kakao.png" alt="" /></a>
+					</td>
+					
+					<td>
+						<a href="javascript:shareLink();" class="copy_url"><img src="/resources/img/ico/ico_url.png" alt="" /></a>
+					</td>
+					
+					<td>
+						<a href="javascript:shareNaver();"><img src="/resources/img/ico/ico_blog.png" alt="" /></a>
+					</td>
+					
+					
+				</tr>
+			</table>
+		</div>
+		<div id="hideInputUrl" style="">
+			<input type="text" value="" name="" readonly="readonly"/>
+			<input id="clip_target" type="text" value="" style="display:none; "/>
+
+			<a href="javascript:copyCurrentUrl();">복사</a> 
+			<span class="share_notice">텍스트를 복사해서 사용해주세요.</span>
+		</div>
+	</div>
+</div>
+<!-- // 공유하기 팝업 -->
+
+<div class="red_m_version">
+	<div class="main_category_wrap">
+		
+		
+		<div id="main_popup" style="display:none;">
+			<ul>
+				<li class="popup_img"></li>
+				<li class="onec_close"> 
+					<input type="checkbox" name="main_popup_check" id="main_today" value="1"/>
+					<label for="main_today"><span></span></label>
+					<span class="this_reson">1일동안 창 닫기</span>
+					<a href="javascript:main_popup_close();">확인</a>
+				</li>
+			</ul>
+			<div class="main_popup_bg"></div>	
+		</div>
+		
+		<div id="header">
+			<div class="head_logo">
+				<a href="https://m.red.kia.com/kr/view/web/kman/kmain.do">
+					<img src="/resources/img/main/red_logo.png" alt="레드멤버스로고"/>
+				</a>
+				<span><a href="/index/main">카앤라이프몰</a></span>
+			</div>
+			
+			
+				<div class="head_login" >
+					<a href="/redLogin">로그인</a>
+				</div>
+			
+			
+			<!-- <div class="head_menu_bg"></div> -->
+		</div>
+		<div class="member_menu" style="display:none;" >
+			<div class="panel">		
+				<label class="text" for="toggle">
+					<div class="member_name">
+						<span class="member_user"></span>님 환영합니다.
+					</div>
+				</label>
+				<label class="icon" for="toggle"><img src="/resources/img/btn/down_arrow.png" alt="더보기"></label>
+			</div>
+			<input type="checkbox" id="toggle">
+			<div class="dropdown">
+				<a href="/mypage/main" class="row"><div class="text">마이 카앤라이프</div></a>
+				<a href="javascript:loginCheckForPage('purchaseList');" class="row"><div class="text">주문/예약내역</div></a>
+				<a href="/cart/cart_list" class="row"><div class="text">장바구니</div></a>
+				<a href="javascript:goLogout();" class="row"><div class="text">로그아웃</div></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	
+	</header>
+	<!-- 상단 배너 끝 -->
+	<div id="content">
+		<div class="content_wrap">
+
+			<!-- 메인 로테이션 배너 부분 -->
+			<div class="main_banner_wrap">
+				<ul class="category_banner">
+					
+						<li><a href="https://kia.auton.kr/product/category/category_main?pcid=1505&rootid=1324"  target="_balnk" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1605766318234.jpg" alt="창고대방출" /></a></li>
+					
+						<li><a href="/product/event/579"  target="_balnk" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1605597998854.jpg" alt="겨울 필수 차량용품 기획전" /></a></li>
+					
+						<li><a href="/product/category/product_view/69790"  target="_balnk" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1603990342731.jpg" alt="레드굿즈 캠핑 트레일러" /></a></li>
+					
+						<li><a href="/product/category/product_view/70832"  target="_balnk" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1603464545209.jpg" alt="The Driving APP KEY" /></a></li>
+					
+						<li><a href="/product/event/488"  target="_balnk" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1597724507292.jpg" alt="카니발 레드굿즈 출시" /></a></li>
+					
+						<li><a href="/index/eventMall#1328^3752"  target="_balnk" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1599695463475.jpg" alt="타이거즈관 런칭" /></a></li>
+					
+						<li><a href="/product/category/product_view/69241"  target="_balnk" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1594903675389.jpg" alt="K9 굿드라이버 프로그램" /></a></li>
+					
+						<li><a href="/product/event/476"  target="_balnk" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1597044294266.jpg" alt="세차용품 모음전" /></a></li>
+					
+						<li><a href="/product/event/394"  target="_balnk" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1590598468677.jpg" alt="나들이&캠핑용품 기획전" /></a></li>
+					
+				</ul>
+			</div>
+			<!-- 메인 로테이션 배너 부분  끝-->
+			<!-- 마이카라이프 부분 -->
+			<div class="my_carlife">
+				<a href="/mypage/main">
+					<p>마이 <span>카앤라이프</span></p>
+					<img src="/resources/img/btn/add_next.png" alt="이동버튼" />
+				</a>
+			</div>
+			<!-- 마이카라이프 부분 끝 -->
+			<!-- 검색부분 -->
+			<div class="search_wrap" OnClick="location.href='/search/list'">
+				<div class="search_text">
+					<input type="text" value="" id="search" placeholder="검색어를 입력해주세요." disabled/>
+					<a href="javascript:searchProduct();"><img src="/resources/img/btn/search_btn.png" alt="검색" /></a>
+				</div>
+			</div>
+			<!-- 검색부분 끝 -->
+
+			<!-- 쇼핑몰 바로가기 -->
+			<div class="mall_contents">
+				<ul class="gate_slide">
+					<li>
+						<a href="/index/productMall">
+							<img src="/resources/img/btn/btn_product_mall.png" alt="용품쇼핑"/>
+							<span>용품쇼핑</span>
+						</a>
+					</li>
+					<li>
+						<a href="/index/carCare">
+							<img src="/resources/img/btn/btn_carcare_mall.png" alt="차량케어"/>
+							<span>차량케어</span>
+						</a>
+					</li>
+					<li>
+						<a href="/run/parking/parking_main">
+							<img src="/resources/img/btn/btn_carlife_mall.png" alt="차량운행"/>
+							<span>차량운행</span>
+						</a>
+					</li>
+					<li>
+						<a href="/index/redGoodsMall#1881^1881">
+							<img src="/resources/img/btn/btn_redgoods_mall.png" alt="레드굿즈" style="width:42px;margin:8px 0;"/>
+							<span>레드굿즈</span>
+						</a>
+					</li>
+					<li>
+						<a href="/used_car_mall">
+							<img src="/resources/img/btn/btn_usercar_mall.png" alt="중고차"/>
+							<span>중고차</span>
+						</a>
+					</li>
+					<li>
+						<a href="/index/eventMall#1325^1325">
+							<img src="/resources/img/btn/btn_event_mall.png" alt="기획관"/>
+							<span>기획관</span>
+						</a>
+					</li>
+					
+					
+				</ul>
+			</div>
+			<!-- 쇼핑몰 바로가기 끝 -->
+
+			<!-- 이벤트배너 부분 -->
+			<div class="event_banner_wrap">
+				
+				
+					<ul class="event_banner">
+						
+							<li><a href="/index/eventMall#1325^1506" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1554233027117.jpg" alt="굿바이! 미세먼지" /></a></li>
+						
+							<li><a href="/index/eventMall#1325^1505" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1554735100787.jpg" alt="창고대방출 헐!가!" /></a></li>
+						
+							<li><a href="/product/event/141" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1552625963106.jpg" alt="The K9 브랜드컬렉션" /></a></li>
+						
+							<li><a href="/product/category/product_view/41648" ><img src="//stor.auton.kr/auton/o2o/banner/Widget_1558368120127.jpg" alt="전기차 충전기" /></a></li>
+						
+					</ul>
+				
+				
+				
+			</div>
+			<!-- 이벤트배너 부분 끝 -->
+
+			<!-- 배너 모음 -->
+			<div class="banner_contents">
+				<table>
+					<colgroup>
+						<col width="50%"/>
+						<col width="50%"/>
+					</colgroup>
+					
+						
+							<tr>
+						
+							<td>
+								<a href="/index/eventMall#1325^1332">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1541308152876.png" alt="카매트 모음"/>
+								</a>
+							</td>
+						
+					
+						
+							<td>
+								<a href="/index/eventMall#1325^1333">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1541308161334.png" alt="대쉬보드 커버 모음"/>
+								</a>
+							</td>
+						
+							</tr>
+						
+					
+						
+							<tr>
+						
+							<td>
+								<a href="/index/eventMall#1325^1334">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1541308169804.png" alt="키 케이스 모음"/>
+								</a>
+							</td>
+						
+					
+						
+							<td>
+								<a href="/index/eventMall#1325^1336">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1543863099777.jpg" alt="거치대 모음"/>
+								</a>
+							</td>
+						
+							</tr>
+						
+					
+						
+							<tr>
+						
+							<td>
+								<a href="/index/eventMall#1325^1513">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1543862946202.jpg" alt="신차 필수템"/>
+								</a>
+							</td>
+						
+					
+						
+							<td>
+								<a href="/index/eventMall#1325^1331">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1543904373269.jpg" alt="주간 best 20"/>
+								</a>
+							</td>
+						
+							</tr>
+						
+					
+						
+							<tr>
+						
+							<td>
+								<a href="/index/eventMall#1325^1506">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1543863115914.jpg" alt="공기청정기 모음"/>
+								</a>
+							</td>
+						
+					
+						
+							<td>
+								<a href="/index/eventMall#1325^1514">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1543862969613.jpg" alt="세차용품 모음"/>
+								</a>
+							</td>
+						
+							</tr>
+						
+					
+						
+							<tr>
+						
+							<td>
+								<a href="/index/eventMall#1325^1510">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1543464249231.jpg" alt="블랙박스 모음"/>
+								</a>
+							</td>
+						
+					
+						
+							<td>
+								<a href="/index/eventMall#1325^1335">
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1541308177350.png" alt="방향제 모음"/>
+								</a>
+							</td>
+						
+							</tr>
+						
+					
+				</table>
+			</div>
+			<!-- 배너모음 끝 -->
+			
+			<!-- 레드 멤버스 VIP mall  -->
+			
+			
+			<!-- 레드 멤버스 VIP mall  끝 -->
+
+			<!-- 케어서비스 -->
+			<div class="carcare_contents" style="background:#fff;">
+				<h3>
+					<ul>
+						<li class="carcare_title">차량케어</li>
+						<li class="care_all_list_btn"><a href="/index/carCare">전체보기 ></a></li>
+					</ul>
+				</h3>
+				<div class="carcare_tabs">
+					<ul class="tabs_ul">
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+								<li class="tabs_li_link" id="care1168">
+									<a href="javascript:openCarCareTab('1168');" class="">신차케어</a>
+								</li>
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+								<li class="tabs_li_link" id="care1171">
+									<a href="javascript:openCarCareTab('1171');" class="">튜닝장착</a>
+								</li>
+							
+						
+							
+								<li class="tabs_li_link" id="care1169">
+									<a href="javascript:openCarCareTab('1169');" class="">유지관리</a>
+								</li>
+							
+						
+							
+						
+							
+						
+							
+						
+							
+								<li class="tabs_li_link" id="care1871">
+									<a href="javascript:openCarCareTab('1871');" class="">공항발렛실내주차</a>
+								</li>
+							
+						
+							
+								<li class="tabs_li_link" id="care3706">
+									<a href="javascript:openCarCareTab('3706');" class="">이벤트</a>
+								</li>
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+							
+						
+						<!-- <li class="tabs_li_link" id="care1168">
+							<a href="javascript:openCarCareTab('1168');">신차케어</a>
+						</li>
+						<li class="tabs_li_link" id="care1171">
+							<a href="javascript:openCarCareTab('1171');">튜닝장착</a>
+						</li>
+						<li class="tabs_li_link last" id="care1169">
+							<a href="javascript:openCarCareTab('1169');">리모델링</a>
+						</li> -->
+						
+						<!-- <li class="tabs_li_link last" id="care1168">
+							<a href="javascript:openCarCareTab('1168');">유지관리</a>
+						</li>
+						 -->
+					</ul>
+					<div class="tabs_content_box">
+						<!-- 신차케어 -->
+						<div id="tabsContent01" class="carcare_tabs_content">
+							<div class="produxt_list">
+								<ul>
+								</ul>
+							</div>
+							<p class="map_box">
+								<a href="/index/carCare">
+									<img src="/resources/img/main/carcare_map_img.jpg" alt=""/>
+								</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 케어서비스 끝 -->
+
+			<!-- 카라이프tv -->
+			<div class="car_life_tv_wrap">
+				<div class="menu_title">카라이프TV</div>
+				<ul class="car_life_tv_banner_list"> 
+					
+						<li>
+							<div class="life_tv_box">
+								<a href="/index/eventMall#1329^3436"  target="_balnk" >
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1575665931069.jpg" alt="모하비 글램핑 행사" />
+								</a>
+							</div>
+							<div class="tv_banner_text">
+								<span>모하비 글램핑 행사</span>
+							</div>
+						</li>
+					
+						<li>
+							<div class="life_tv_box">
+								<a href="/index/eventMall#1329^1828"  target="_balnk" >
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1567627922319.jpg" alt="기아  드라이빙 아카데미" />
+								</a>
+							</div>
+							<div class="tv_banner_text">
+								<span>기아  드라이빙 아카데미</span>
+							</div>
+						</li>
+					
+						<li>
+							<div class="life_tv_box">
+								<a href="/index/eventMall#1329^1687" >
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1556889803938.jpg" alt="쏘울 부스터 전용상품" />
+								</a>
+							</div>
+							<div class="tv_banner_text">
+								<span>쏘울 부스터 전용상품</span>
+							</div>
+						</li>
+					
+						<li>
+							<div class="life_tv_box">
+								<a href="/index/eventMall#1329^1369" >
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1541348641436.jpg" alt="애완견과 함께하는 드라이브 나들이" />
+								</a>
+							</div>
+							<div class="tv_banner_text">
+								<span>애완견과 함께하는 드라이브 나들이</span>
+							</div>
+						</li>
+					
+						<li>
+							<div class="life_tv_box">
+								<a href="/index/eventMall#1329^1371" >
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1541348655645.jpg" alt="PPF란 무엇일까?" />
+								</a>
+							</div>
+							<div class="tv_banner_text">
+								<span>PPF란 무엇일까?</span>
+							</div>
+						</li>
+					
+						<li>
+							<div class="life_tv_box">
+								<a href="/index/eventMall#1329^1478" >
+									<img src="//stor.auton.kr/auton/o2o/banner/Widget_1541348662996.jpg" alt="5분이면 마스터 할 수 있는 차량 용품" />
+								</a>
+							</div>
+							<div class="tv_banner_text">
+								<span>5분이면 마스터 할 수 있는 차량 용품</span>
+							</div>
+						</li>
+					
+				</ul>
+			</div>
+			<!-- 카라이프 tv 끝 -->
+			
+			<!-- 타이틀 라인 -->
+			<div class="title_tab_wrap">
+				<!-- <h3>타이틀</h3> -->
+				<ul>
+					<li id="title163">
+						<a href="javascript:openTitleGroupProduct('163');">
+							<p class="icon_01"></p>
+							<span>신상품</span>
+						</a>
+					</li>
+					<li id="title165">
+						<a href="javascript:openTitleGroupProduct('165');">
+							<p class="icon_02"></p>
+							<span>특가상품</span>
+						</a>
+					</li>
+					<li id="title1326">
+						<a href="javascript:openTitleProduct('1326');">
+							<p class="icon_03"></p>
+							<span>차종별 상품</span>
+						</a>
+					</li>
+					<li id="title1095">
+						<a href="javascript:openTitleProduct('1095');">
+							<p class="icon_04"></p>
+							<span>추천용품</span>
+						</a>
+					</li>
+					<li id="title1096">
+						<a href="javascript:openTitleProduct('1096');">
+							<p class="icon_05"></p>
+							<span>추천케어</span>
+						</a>
+					</li>
+				</ul>
+				<div class="title_tab_all">
+					<a href="">전체보기 ></a>
+				</div>
+				<!-- 신상품 상품 -->
+				<div class="produxt_list">
+					<ul>
+						
+					</ul>
+				</div>
+			</div>
+			<!-- 
+			<div class="plus_view">
+				<a href="javascript:moreProduct();">
+					<p>더보기<span class="now_item"></span><span>/</span><span class="all_item"></span></p>
+				</a>
+			</div>
+			 -->
+			 <!-- 기타 메뉴 -->
+			<div class="menu_etc">
+				<ul>
+					<li><a href="javascript:goUrl('/mypage/recent_product');">최근 본 상품</a></li>
+					<li><a href="javascript:goUrl('/product/event/event_list');">이벤트</a></li>
+					<li class="bd_b_d"><a href="javascript:goUrl('/content/faq/list');">자주 묻는 질문</a></li>
+					<li><a href="javascript:goUrl('/content/bbs/post/list');">공지사항 <!-- <span class="text_red_active">[5]</span> --></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<footer>
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<script>var mobileType = "M";</script>
+	
+
+
+<script>
+$(function(){
+	/* 사업자정보 토글 */
+	$('.footer_info .footer_title').click(function(){
+		$('.footer_info_tab').toggle();
+	});
+});
+
+</script>
+<!-- <script type="text/javascript">
+(function(w, d, a){
+	w.__beusablerumclient__ = {
+		load : function(src){
+			var b = d.createElement("script");
+			b.src = src; b.async=true; b.type = "text/javascript";
+			d.getElementsByTagName("head")[0].appendChild(b);
+		}
+	};w.__beusablerumclient__.load(a);
+})(window, document, '//rum.beusable.net/script/b190103e235128u327/433ff16250');
+</script> -->
+<!-- 기아앱 일때 나오는 푸터(분기확인 부탁드립니다.)-->
+<div class="provision_contents_wrap">
+	<div class="center_number">
+		<ul>
+			<li>고객센터</li>
+			<li><a href="tel:1644-5771">1644-5771</a></li>
+		</ul>
+		<span>고객센터 운영시간 : 평일 09:00 ~ 17:00 ( 점심시간 : 12:00 ~ 13:00 )</span>
+		<span class="last_sp">토,일 및 공휴일 휴무</span>
+	</div>
+	<!-- 개인정보처리방침 & 이용약관 -->
+	<div class="provision_contents">
+		<ul>
+			<li class="provision_text">
+				<a href="/page/securityPolicy/MPP">개인정보처리방침</a>
+			</li>
+			<li>|</li>
+			<li class="provision_text2">
+				<a href="/page/agreement/MCU">이용약관</a>
+			</li>
+			<li>|</li>
+			<li class="provision_text3">
+				<a href="/page/location-agreement/MLO">위치기반서비스 이용약관</a>
+			</li>
+		</ul>
+	</div>
+	<!-- 개인정보처리방침 & 이용약관 끝 -->
+	<div class="footer_wrap">
+		<div class="footer_info">
+			<p>MALL은 오토앤 주식회사의 관리하에 운영되고 있으며, 몰 운영에 대한 책임은 오토앤 주식회사에 있습니다.</p><br />
+			<div class="footer_title">
+				<span>오토앤 주식회사 사업자정보</span>
+				<span><img src="/resources/img/btn/footer_down_btn.png" alt="" /></span>
+			</div>
+			<div class="footer_info_tab">
+				<p>사업자등록번호 : 138-81-72768 | 대표 : 최찬욱</p>
+				<p>팩스 : 031-462-3387</p>
+				<p>통신판매신고번호 : 제2017-안양만안-0384호</p>
+				<p>개인정보관리책임자 : 전은석</p>
+				<p>호스팅서비스사업자 : (주)에스유소프트</p>
+				<p>대표전화 : 1644-7160</p>
+			</div>
+			<p>Copyrightⓒ오토앤 주식회사. All right Reserved.</p>
+		</div>
+	</div>
+</div>
+<!-- //기아앱 일때 나오는 푸터(분기확인 부탁드립니다.)-->
+<script type="text/javascript">
+	
+</script>
+	</footer>
+
+	<script type="text/javascript">
+		/* 메인 이벤트 슬라이드 */
+		categorySlider = $(".category_banner").lightSlider({
+	        item:1,
+	        slideMargin:0,
+	        loop:true,
+	        pause:7000,
+	        auto:true
+	    });
+		
+		/* 게이트 슬라이드 */
+		gateSlider = $(".gate_slide").lightSlider({
+	        item:4.5,
+	        slideMargin:0,
+	        loop:false,
+	        pager:false,
+	        controls:false
+	    });
+		
+		/* 이벤트 슬라이드 */
+		eventSlider = $(".event_banner").lightSlider({
+	        item:1,
+	        slideMargin:0,
+	        loop:true,
+	        pause:4000,
+	        auto:true
+	    });
+		
+		/* 카라이프TV 슬라이드 */
+		carlifeSlider = $(".car_life_tv_banner_list").lightSlider({
+			item:2.5,
+			slideMargin:5,
+	        loop:false,
+	        pager:false
+	    });
+
+		// 본인인증 클릭 시 진행소스
+		$('.authorization').click(function(){
+			$(this).hide();
+			$('.check_redCard').show();
+		});
+		$('.pointer_inquiry').click(function(){
+			$('.check_redCard').hide();
+			$('.user_point_view').show();
+		});
+		
+	</script>
+
 </body>
 </html>
+
